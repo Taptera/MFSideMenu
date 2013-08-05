@@ -51,6 +51,7 @@ typedef enum {
 // width of the side menus
 @property (nonatomic, assign) CGFloat menuWidth;
 @property (nonatomic, assign) CGFloat leftMenuWidth;
+@property (nonatomic, assign) CGFloat fixedLeftViewWidth;
 @property (nonatomic, assign) CGFloat rightMenuWidth;
 
 // shadow

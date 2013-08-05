@@ -89,6 +89,7 @@ typedef enum {
     self.menuAnimationDefaultDuration = 0.2f;
     self.menuAnimationMaxDuration = 0.4f;
     self.panMode = MFSideMenuPanModeDefault;
+    self.fixedLeftViewWidth = -1;
 }
 
 - (void)setupMenuContainerView {
@@ -335,7 +336,7 @@ typedef enum {
 - (void) setLeftSideMenuFrameToClosedPosition {
     if(!self.leftMenuViewController) return;
     CGRect leftFrame = [self.leftMenuViewController view].frame;
-    leftFrame.size.width = self.leftMenuWidth;
+    leftFrame.size.width = self.fixedLeftViewWidth > 0 ? self.fixedLeftViewWidth : self.leftMenuWidth;
     leftFrame.origin.x = (self.menuSlideAnimationEnabled) ? -1*leftFrame.size.width / self.menuSlideAnimationFactor : 0;
     leftFrame.origin.y = 0;
     [self.leftMenuViewController view].frame = leftFrame;
@@ -355,8 +356,9 @@ typedef enum {
 
 - (void)alignLeftMenuControllerWithCenterViewController {
     CGRect leftMenuFrame = [self.leftMenuViewController view].frame;
-    leftMenuFrame.size.width = _leftMenuWidth;
-    CGFloat menuX = [self.centerViewController view].frame.origin.x - leftMenuFrame.size.width;
+    leftMenuFrame.size.width = self.fixedLeftViewWidth > 0 ? self.fixedLeftViewWidth : self.leftMenuWidth;
+    CGFloat menuX = self.fixedLeftViewWidth > 0 ? 0 :
+            [self.centerViewController view].frame.origin.x - leftMenuFrame.size.width;
     leftMenuFrame.origin.x = menuX;
     [self.leftMenuViewController view].frame = leftMenuFrame;
 }
