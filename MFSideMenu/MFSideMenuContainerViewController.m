@@ -161,6 +161,7 @@ typedef enum {
     if(self.menuContainerView.superview) {
         [self.menuContainerView insertSubview:[_leftSideMenuViewController view] atIndex:0];
     }
+    [((UIViewController *)_leftSideMenuViewController) view].frame = self.view.bounds;
     [_leftSideMenuViewController didMoveToParentViewController:self];
     
     [self setLeftSideMenuFrameToClosedPosition];
@@ -175,7 +176,7 @@ typedef enum {
     
     [self addChildViewController:_centerViewController];
     [self.view addSubview:[_centerViewController view]];
-    [((UIViewController *)_centerViewController) view].frame = (CGRect){.origin = origin, .size=centerViewController.view.frame.size};
+    [((UIViewController *)_centerViewController) view].frame = self.view.bounds;
     
     [_centerViewController didMoveToParentViewController:self];
     
