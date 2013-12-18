@@ -47,6 +47,29 @@ typedef enum {
 @synthesize menuAnimationDefaultDuration;
 @synthesize menuAnimationMaxDuration;
 
+#pragma mark - status bar style
+
+- (UIViewController *)activeController {
+    switch (self.menuState) {
+        case MFSideMenuStateClosed: {
+            return self.centerViewController;
+        }
+        case MFSideMenuStateLeftMenuOpen:
+            return self.leftMenuViewController;
+        case MFSideMenuStateRightMenuOpen:
+            return self.rightMenuViewController;
+        default:
+            return nil;
+    }
+}
+
+- (UIViewController *)childViewControllerForStatusBarStyle {
+    return self.activeController;
+}
+
+- (UIViewController *)childViewControllerForStatusBarHidden {
+    return self.activeController;
+}
 
 #pragma mark -
 #pragma mark - Initialization
@@ -272,6 +295,10 @@ typedef enum {
 - (void)setMenuState:(MFSideMenuState)menuState completion:(void (^)(void))completion {
     void (^innerCompletion)() = ^ {
         _menuState = menuState;
+       
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+            [self setNeedsStatusBarAppearanceUpdate];
+        }
         
         [self setUserInteractionStateForCenterViewController];
         MFSideMenuStateEvent eventType = (_menuState == MFSideMenuStateClosed) ? MFSideMenuStateEventMenuDidClose : MFSideMenuStateEventMenuDidOpen;
